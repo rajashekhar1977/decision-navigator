@@ -37,6 +37,7 @@ export interface Question {
   type: 'single' | 'multi' | 'text' | 'range';
   options?: { value: string; label: string }[];
   placeholder?: string;
+  showIf?: (answers: Record<string, any>) => boolean;
 }
 
 export interface SurveyState {

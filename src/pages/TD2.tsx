@@ -3,8 +3,9 @@ import { CategoryPicker } from '@/components/td2/CategoryPicker';
 import { FlowSurvey } from '@/components/td2/FlowSurvey';
 import { DecisionCard } from '@/components/td2/DecisionCard';
 import { categories } from '@/data/categories';
-import { getMockResults } from '@/data/mockRecommendations';
+import { getRecommendations } from '@/services/recommendationService';
 import { CategoryConfig, EnrichedOption } from '@/types/td2';
+import { toast } from 'sonner';
 
 type AppState = 'category' | 'survey' | 'result';
 
@@ -21,17 +22,27 @@ const TD2Page = () => {
   };
 
   const handleSurveyComplete = async (answers: Record<string, any>) => {
+    if (!selectedCategory) return;
+    
     setIsLoading(true);
     
-    // Simulate API call delay
-    await new Promise((resolve) => setTimeout(resolve, 2000));
-    
-    // Get mock results based on category
-    const results = getMockResults(selectedCategory?.id || 'entertainment');
-    setRecommendations(results);
-    setCurrentIndex(0);
-    setIsLoading(false);
-    setAppState('result');
+    try {
+      // Get AI-powered recommendations
+      const results = await getRecommendations(selectedCategory.id, answers);
+      setRecommendations(results);
+      setCurrentIndex(0);
+      setAppState('result');
+      toast.success('Recommendations ready!');
+    } catch (error) {
+      console.error('Error getting recommendations:', error);
+      toast.error(
+        error instanceof Error 
+          ? error.message 
+          : 'Failed to get recommendations. Please check your API keys in .env file.'
+      );
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleReload = () => {
