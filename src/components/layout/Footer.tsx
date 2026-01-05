@@ -1,4 +1,4 @@
-import { LayoutGrid, Github, Twitter, Mail, Heart } from 'lucide-react';
+import { Heart } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 
@@ -11,7 +11,7 @@ export function Footer() {
       <div className="absolute inset-0 bg-gradient-to-r from-primary/5 via-transparent to-purple-500/5 pointer-events-none" />
       
       <div className="container-mobile section-padding relative">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-12">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-12">
           {/* Brand Section */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -20,43 +20,20 @@ export function Footer() {
             className="col-span-1 sm:col-span-2 lg:col-span-1"
           >
             <Link to="/" className="flex items-center gap-2 font-bold text-xl mb-4 group">
-              <motion.div whileHover={{ rotate: 180 }} transition={{ duration: 0.3 }}>
-                <LayoutGrid className="h-7 w-7 text-primary" />
+              <motion.div whileHover={{ scale: 1.1 }} transition={{ duration: 0.3 }}>
+                <img 
+                  src="/favicon.svg" 
+                  alt="Rs AppHub Logo" 
+                  className="h-7 w-7"
+                />
               </motion.div>
               <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary to-purple-600 dark:from-primary dark:to-pink-500">
-                AppHub
+                Rs AppHub
               </span>
             </Link>
             <p className="text-sm text-muted-foreground mb-4 max-w-xs">
-              AI-powered decision-making tools to simplify your life. Make smarter choices, faster.
+              Your personal productivity suite featuring AI-powered tools to simplify your life and boost productivity.
             </p>
-            <div className="flex gap-3">
-              <motion.a
-                whileHover={{ scale: 1.1, rotate: 5 }}
-                href="https://github.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-muted-foreground hover:text-primary transition-colors p-2 rounded-lg hover:bg-primary/10"
-              >
-                <Github className="h-5 w-5" />
-              </motion.a>
-              <motion.a
-                whileHover={{ scale: 1.1, rotate: -5 }}
-                href="https://twitter.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-muted-foreground hover:text-primary transition-colors p-2 rounded-lg hover:bg-primary/10"
-              >
-                <Twitter className="h-5 w-5" />
-              </motion.a>
-              <motion.a
-                whileHover={{ scale: 1.1, rotate: 5 }}
-                href="mailto:hello@apphub.com"
-                className="text-muted-foreground hover:text-primary transition-colors p-2 rounded-lg hover:bg-primary/10"
-              >
-                <Mail className="h-5 w-5" />
-              </motion.a>
-            </div>
           </motion.div>
 
           {/* Apps Section */}
@@ -80,6 +57,26 @@ export function Footer() {
               </li>
               <li>
                 <Link
+                  to="/budget"
+                  className="text-muted-foreground hover:text-primary transition-colors inline-flex items-center gap-2 group"
+                >
+                  <span className="group-hover:translate-x-1 transition-transform">
+                    Budget Buddy
+                  </span>
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/habit"
+                  className="text-muted-foreground hover:text-primary transition-colors inline-flex items-center gap-2 group"
+                >
+                  <span className="group-hover:translate-x-1 transition-transform">
+                    Habit Hero
+                  </span>
+                </Link>
+              </li>
+              <li>
+                <Link
                   to="/apps"
                   className="text-muted-foreground hover:text-primary transition-colors inline-flex items-center gap-2 group"
                 >
@@ -87,41 +84,6 @@ export function Footer() {
                     Browse All Apps
                   </span>
                 </Link>
-              </li>
-              <li>
-                <span className="text-muted-foreground/50 text-xs">More coming soon...</span>
-              </li>
-            </ul>
-          </motion.div>
-
-          {/* Resources Section */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.2 }}
-          >
-            <h4 className="font-bold text-foreground mb-4 text-sm uppercase tracking-wider">Resources</h4>
-            <ul className="space-y-3 text-sm">
-              <li>
-                <a href="#" className="text-muted-foreground hover:text-primary transition-colors inline-flex items-center gap-2 group">
-                  <span className="group-hover:translate-x-1 transition-transform">Documentation</span>
-                </a>
-              </li>
-              <li>
-                <a href="#" className="text-muted-foreground hover:text-primary transition-colors inline-flex items-center gap-2 group">
-                  <span className="group-hover:translate-x-1 transition-transform">API Reference</span>
-                </a>
-              </li>
-              <li>
-                <a href="#" className="text-muted-foreground hover:text-primary transition-colors inline-flex items-center gap-2 group">
-                  <span className="group-hover:translate-x-1 transition-transform">Support</span>
-                </a>
-              </li>
-              <li>
-                <a href="#" className="text-muted-foreground hover:text-primary transition-colors inline-flex items-center gap-2 group">
-                  <span className="group-hover:translate-x-1 transition-transform">Blog</span>
-                </a>
               </li>
             </ul>
           </motion.div>
@@ -131,29 +93,41 @@ export function Footer() {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ delay: 0.3 }}
+            transition={{ delay: 0.2 }}
           >
             <h4 className="font-bold text-foreground mb-4 text-sm uppercase tracking-wider">Company</h4>
             <ul className="space-y-3 text-sm">
               <li>
-                <a href="#" className="text-muted-foreground hover:text-primary transition-colors inline-flex items-center gap-2 group">
+                <Link
+                  to="/about"
+                  className="text-muted-foreground hover:text-primary transition-colors inline-flex items-center gap-2 group"
+                >
                   <span className="group-hover:translate-x-1 transition-transform">About</span>
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#" className="text-muted-foreground hover:text-primary transition-colors inline-flex items-center gap-2 group">
+                <Link
+                  to="/privacy"
+                  className="text-muted-foreground hover:text-primary transition-colors inline-flex items-center gap-2 group"
+                >
                   <span className="group-hover:translate-x-1 transition-transform">Privacy Policy</span>
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#" className="text-muted-foreground hover:text-primary transition-colors inline-flex items-center gap-2 group">
+                <Link
+                  to="/terms"
+                  className="text-muted-foreground hover:text-primary transition-colors inline-flex items-center gap-2 group"
+                >
                   <span className="group-hover:translate-x-1 transition-transform">Terms of Service</span>
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#" className="text-muted-foreground hover:text-primary transition-colors inline-flex items-center gap-2 group">
+                <Link
+                  to="/contact"
+                  className="text-muted-foreground hover:text-primary transition-colors inline-flex items-center gap-2 group"
+                >
                   <span className="group-hover:translate-x-1 transition-transform">Contact</span>
-                </a>
+                </Link>
               </li>
             </ul>
           </motion.div>

@@ -45,8 +45,8 @@ const Index = () => {
       title: 'Budget Buddy',
       description: 'Smart expense tracking and budget management',
       icon: '💰',
-      href: '#',
-      status: 'Coming Soon',
+      href: '/budget',
+      status: 'Available',
       gradient: 'from-blue-600 to-cyan-600',
     },
     {
@@ -54,8 +54,8 @@ const Index = () => {
       title: 'Habit Hero',
       description: 'Build positive habits with gamified tracking',
       icon: '🎯',
-      href: '#',
-      status: 'Coming Soon',
+      href: '/habit',
+      status: 'Available',
       gradient: 'from-orange-600 to-red-600',
     },
   ];
@@ -78,7 +78,7 @@ const Index = () => {
       y: 0,
       transition: {
         duration: 0.6,
-        ease: [0.22, 1, 0.36, 1], // Custom easing for smooth motion
+        ease: [0.22, 1, 0.36, 1] as any, // Custom easing for smooth motion
       },
     },
   };
@@ -91,7 +91,7 @@ const Index = () => {
       rotateX: 0,
       transition: {
         duration: 0.7,
-        ease: [0.22, 1, 0.36, 1],
+        ease: [0.22, 1, 0.36, 1] as any,
       },
     },
   };
@@ -128,10 +128,10 @@ const Index = () => {
               className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-black mb-4 md:mb-6 leading-[1.1] tracking-tight px-4"
               variants={itemVariants}
             >
-              Make Better
+              Your Personal
               <br />
               <span className="bg-gradient-to-r from-purple-600 via-pink-600 to-blue-600 bg-clip-text text-transparent animate-gradient inline-block hover:scale-105 transition-transform duration-500">
-                Decisions
+                App Hub
               </span>
             </motion.h1>
 
@@ -140,8 +140,8 @@ const Index = () => {
               className="text-base sm:text-lg md:text-xl lg:text-2xl text-muted-foreground mb-8 md:mb-12 max-w-3xl mx-auto leading-relaxed px-4"
               variants={itemVariants}
             >
-              A collection of intelligent micro-apps powered by AI to help you navigate life's choices with{' '}
-              <span className="text-primary font-semibold">confidence</span>
+              A collection of intelligent micro-apps designed to simplify your daily life. From decisions to budgets, we've got you covered with{' '}
+              <span className="text-primary font-semibold">smart tools</span>
             </motion.p>
 
             {/* CTA Buttons - Mobile optimized */}
@@ -154,9 +154,9 @@ const Index = () => {
                 size="lg" 
                 className="text-base md:text-lg px-6 md:px-8 py-6 md:py-7 rounded-full shadow-2xl shadow-primary/50 hover:shadow-primary/70 transition-all duration-300 hover:scale-105 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 relative overflow-hidden group"
               >
-                <Link to="/td2" className="relative z-10">
+                <Link to="/apps" className="relative z-10">
                   <Sparkles className="h-4 w-4 md:h-5 md:w-5 mr-2" />
-                  Try TD² Now
+                  Explore Apps
                   <ArrowRight className="h-4 w-4 md:h-5 md:w-5 ml-2 group-hover:translate-x-1 transition-transform" />
                   <span className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
                 </Link>
@@ -167,8 +167,8 @@ const Index = () => {
                 variant="outline" 
                 className="text-base md:text-lg px-6 md:px-8 py-6 md:py-7 rounded-full glass-strong border-2 border-white/30 dark:border-white/20 hover:bg-white/20 dark:hover:bg-white/10 transition-all duration-300 hover:scale-105"
               >
-                <Link to="/apps">
-                  Explore All Apps
+                <Link to="#features">
+                  Learn More
                 </Link>
               </Button>
             </motion.div>

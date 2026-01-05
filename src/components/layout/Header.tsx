@@ -1,14 +1,26 @@
 import { Link, useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { ThemeToggle } from '@/components/ThemeToggle';
-import { LayoutGrid, Menu, X, Sparkles } from 'lucide-react';
+import { LayoutGrid, Menu, X, Sparkles, LogOut, User } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useAuth } from '@/contexts/AuthContext';
+import { AuthModal } from '@/components/AuthModal';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 
 export function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [authModalOpen, setAuthModalOpen] = useState(false);
   const location = useLocation();
+  const { user, signOut, loading } = useAuth();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -26,7 +38,6 @@ export function Header() {
   const navItems = [
     { href: '/', label: 'Home' },
     { href: '/apps', label: 'Apps' },
-    { href: '/td2', label: 'TD²' },
   ];
 
   return (
@@ -47,15 +58,19 @@ export function Header() {
             className="flex items-center gap-2 font-bold text-lg sm:text-xl group"
           >
             <motion.div
-              whileHover={{ rotate: 180, scale: 1.1 }}
+              whileHover={{ scale: 1.1 }}
               transition={{ duration: 0.3 }}
               className="relative"
             >
-              <LayoutGrid className="h-6 w-6 sm:h-7 sm:w-7 text-primary transition-colors" />
+              <img 
+                src="/favicon.svg" 
+                alt="Rs AppHub Logo" 
+                className="h-8 w-8 sm:h-9 sm:w-9"
+              />
               <Sparkles className="absolute -top-1 -right-1 h-3 w-3 text-yellow-400 opacity-0 group-hover:opacity-100 transition-opacity" />
             </motion.div>
             <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary to-purple-600 dark:from-primary dark:to-pink-500">
-              AppHub
+              Rs AppHub
             </span>
           </Link>
 
@@ -92,18 +107,54 @@ export function Header() {
             <ThemeToggle />
             
             <div className="hidden md:flex items-center gap-2">
-              <Button variant="ghost" size="sm" className="hidden lg:flex">
-                Sign In
-              </Button>
-              <Button size="sm" className="relative overflow-hidden group">
-                <span className="relative z-10">Get Started</span>
-                <motion.div
-                  className="absolute inset-0 bg-gradient-to-r from-purple-600 to-pink-600"
-                  initial={{ x: '-100%' }}
-                  whileHover={{ x: 0 }}
-                  transition={{ duration: 0.3 }}
-                />
-              </Button>
+              {!loading && (
+                user ? (
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="ghost" size="sm" className="gap-2">
+                        <User className="h-4 w-4" />
+                        <span className="hidden lg:inline">{user.email?.split('@')[0]}</span>
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end" className="w-56 glass-strong">
+                      <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuItem className="text-muted-foreground">
+                        {user.email}
+                      </DropdownMenuItem>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuItem onClick={() => signOut()} className="text-red-500">
+                        <LogOut className="h-4 w-4 mr-2" />
+                        Sign Out
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                ) : (
+                  <>
+                    <Button 
+                      variant="ghost" 
+                      size="sm" 
+                      className="hidden lg:flex"
+                      onClick={() => setAuthModalOpen(true)}
+                    >
+                      Sign In
+                    </Button>
+                    <Button 
+                      size="sm" 
+                      className="relative overflow-hidden group"
+                      onClick={() => setAuthModalOpen(true)}
+                    >
+                      <span className="relative z-10">Get Started</span>
+                      <motion.div
+                        className="absolute inset-0 bg-gradient-to-r from-purple-600 to-pink-600"
+                        initial={{ x: '-100%' }}
+                        whileHover={{ x: 0 }}
+                        transition={{ duration: 0.3 }}
+                      />
+                    </Button>
+                  </>
+                )
+              )}
             </div>
 
             {/* Mobile Menu Button */}
@@ -171,18 +222,50 @@ export function Header() {
                   </motion.div>
                 ))}
                 <div className="flex flex-col gap-2 pt-4 mt-2 border-t border-white/10">
-                  <Button variant="ghost" size="sm" className="justify-start">
-                    Sign In
-                  </Button>
-                  <Button size="sm" className="justify-start">
-                    Get Started
-                  </Button>
+                  {!loading && (
+                    user ? (
+                      <>
+                        <div className="px-4 py-2 text-sm text-muted-foreground">
+                          {user.email}
+                        </div>
+                        <Button 
+                          variant="ghost" 
+                          size="sm" 
+                          className="justify-start text-red-500"
+                          onClick={() => signOut()}
+                        >
+                          <LogOut className="h-4 w-4 mr-2" />
+                          Sign Out
+                        </Button>
+                      </>
+                    ) : (
+                      <>
+                        <Button 
+                          variant="ghost" 
+                          size="sm" 
+                          className="justify-start"
+                          onClick={() => setAuthModalOpen(true)}
+                        >
+                          Sign In
+                        </Button>
+                        <Button 
+                          size="sm" 
+                          className="justify-start"
+                          onClick={() => setAuthModalOpen(true)}
+                        >
+                          Get Started
+                        </Button>
+                      </>
+                    )
+                  )}
                 </div>
               </nav>
             </motion.div>
           )}
         </AnimatePresence>
       </div>
+
+      <AuthModal open={authModalOpen} onOpenChange={setAuthModalOpen} />
     </motion.header>
   );
 }

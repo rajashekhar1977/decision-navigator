@@ -1,7 +1,10 @@
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
+import { AnimatedBackground } from '@/components/AnimatedBackground';
+import { FloatingOrbs } from '@/components/FloatingOrbs';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { AppSuggestionModal } from '@/components/AppSuggestionModal';
 import { Link } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
 
@@ -21,8 +24,8 @@ const AppsPage = () => {
       title: 'Budget Buddy',
       description: 'Smart expense tracking and budget management. Visualize your spending patterns and reach your financial goals.',
       icon: '💰',
-      href: '#',
-      status: 'Coming Soon',
+      href: '/budget',
+      status: 'Available',
       features: ['Expense Tracking', 'Budget Goals', 'Analytics', 'Reports'],
     },
     {
@@ -30,8 +33,8 @@ const AppsPage = () => {
       title: 'Habit Hero',
       description: 'Build positive habits with gamified tracking. Earn streaks, unlock achievements, and transform your daily routines.',
       icon: '🎯',
-      href: '#',
-      status: 'Coming Soon',
+      href: '/habit',
+      status: 'Available',
       features: ['Habit Tracking', 'Streaks', 'Achievements', 'Reminders'],
     },
     {
@@ -64,19 +67,23 @@ const AppsPage = () => {
   ];
 
   return (
-    <div className="min-h-screen flex flex-col bg-background">
-      <Header />
+    <div className="min-h-screen flex flex-col relative overflow-hidden bg-gradient-to-br from-background via-background to-purple-500/5 dark:to-purple-900/10">
+      <AnimatedBackground />
+      <FloatingOrbs />
 
-      <main className="flex-1 pt-24 pb-12">
-        <div className="container mx-auto px-4">
-          {/* Header */}
-          <div className="text-center mb-12">
-            <h1 className="text-4xl font-bold mb-4">All Apps</h1>
-            <p className="text-muted-foreground max-w-2xl mx-auto">
-              Discover our collection of intelligent micro-apps, each designed to solve specific 
-              problems and help you make better decisions in different areas of life.
-            </p>
-          </div>
+      <div className="relative z-10">
+        <Header />
+
+        <main className="flex-1 pt-24 pb-12">
+          <div className="container mx-auto px-4">
+            {/* Header */}
+            <div className="text-center mb-12">
+              <h1 className="text-4xl font-bold mb-4">All Apps</h1>
+              <p className="text-muted-foreground max-w-2xl mx-auto">
+                Discover our collection of intelligent micro-apps, each designed to solve specific 
+                problems and help you make better decisions in different areas of life.
+              </p>
+            </div>
 
           {/* Apps Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
@@ -138,14 +145,13 @@ const AppsPage = () => {
               We're always looking to expand our collection. If you have an idea for a micro-app 
               that could help people make better decisions, we'd love to hear from you.
             </p>
-            <Button variant="outline" size="lg">
-              Suggest an App
-            </Button>
+            <AppSuggestionModal />
           </div>
         </div>
       </main>
 
-      <Footer />
+        <Footer />
+      </div>
     </div>
   );
 };
