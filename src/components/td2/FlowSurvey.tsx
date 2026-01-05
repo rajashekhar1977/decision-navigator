@@ -1,6 +1,8 @@
 import { useState, useEffect, useCallback } from 'react';
 import { CategoryConfig, Question, SurveyState } from '@/types/td2';
 import { Check, ArrowLeft, Loader2 } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { FloatingOrbs } from '@/components/FloatingOrbs';
 
 interface FlowSurveyProps {
   category: CategoryConfig;
@@ -133,145 +135,195 @@ export function FlowSurvey({ category, onComplete, onBack, isLoading }: FlowSurv
 
   if (isLoading) {
     return (
-      <div className="h-[100dvh] w-full flex flex-col items-center justify-center bg-gradient-to-b from-background via-background to-card px-6">
-        {/* Background elements */}
-        <div className="fixed inset-0 pointer-events-none overflow-hidden">
-          <div className="absolute top-20 left-10 w-32 h-32 bg-primary/10 rounded-full blur-3xl animate-pulse" />
-          <div className="absolute bottom-40 right-5 w-40 h-40 bg-secondary/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
-        </div>
-        
-        <div className="relative z-10 flex flex-col items-center gap-6">
+      <div className="h-[100dvh] w-full flex flex-col items-center justify-center bg-gradient-to-b from-background via-background to-card px-6 relative overflow-hidden">
+        <FloatingOrbs />
+
+        <motion.div
+          className="relative z-10 flex flex-col items-center gap-8"
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.5 }}
+        >
           <div className="relative">
-            <div className="w-20 h-20 rounded-full bg-primary/10 flex items-center justify-center">
-              <Loader2 className="w-10 h-10 text-primary animate-spin" />
-            </div>
-            <div className="absolute inset-0 rounded-full border-2 border-primary/20 animate-ping" />
+            <motion.div
+              className="w-24 h-24 rounded-full bg-gradient-to-br from-purple-600 to-pink-600 flex items-center justify-center shadow-2xl"
+              animate={{ rotate: 360 }}
+              transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+            >
+              <Loader2 className="w-12 h-12 text-white" />
+            </motion.div>
+            <motion.div
+              className="absolute inset-0 rounded-full border-4 border-primary/30"
+              animate={{ scale: [1, 1.2, 1], opacity: [0.5, 0, 0.5] }}
+              transition={{ duration: 2, repeat: Infinity }}
+            />
           </div>
           <div className="text-center">
-            <h2 className="text-xl font-semibold text-foreground mb-2">Finding your perfect match</h2>
-            <p className="text-sm text-muted-foreground">Our AI is analyzing your preferences...</p>
+            <motion.h2
+              className="text-2xl font-bold text-foreground mb-3"
+              animate={{ opacity: [1, 0.7, 1] }}
+              transition={{ duration: 1.5, repeat: Infinity }}
+            >
+              Finding your perfect match
+            </motion.h2>
+            <p className="text-base text-muted-foreground">Our AI is analyzing your preferences...</p>
           </div>
-        </div>
+        </motion.div>
       </div>
     );
   }
 
   return (
-    <div className="h-[100dvh] w-full flex flex-col bg-gradient-to-b from-background via-background to-card overflow-hidden">
-      {/* Background elements */}
-      <div className="fixed inset-0 pointer-events-none overflow-hidden">
-        <div className="absolute top-20 left-10 w-32 h-32 bg-primary/5 rounded-full blur-3xl animate-pulse" />
-        <div className="absolute bottom-40 right-5 w-40 h-40 bg-secondary/5 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
-        <div className="absolute top-1/3 right-1/4 w-24 h-24 bg-muted/10 rounded-full blur-2xl animate-pulse" style={{ animationDelay: '0.5s' }} />
-      </div>
+    <div className="h-[100dvh] w-full flex flex-col bg-gradient-to-b from-background via-background to-card overflow-hidden relative">
+      <FloatingOrbs />
 
-      {/* Header with back button */}
-      <header className="relative z-10 flex items-center justify-between px-4 pt-4 pb-2 safe-area-top">
-        <button
-          onClick={onBack}
-          className="flex items-center gap-1 text-muted-foreground hover:text-foreground transition-colors text-sm"
+      <div className="relative z-10 h-full flex flex-col">
+        {/* Header with back button */}
+        <motion.header
+          className="flex items-center justify-between px-6 pt-6 pb-3 safe-area-top"
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
         >
-          <ArrowLeft className="h-4 w-4" />
-          <span>Back</span>
-        </button>
-        <span className="text-sm font-medium text-primary">{getCategoryEmoji()} {category.title}</span>
-      </header>
+          <motion.button
+            onClick={onBack}
+            className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            <ArrowLeft className="h-5 w-5" />
+            <span className="text-sm font-medium">Back</span>
+          </motion.button>
+          <span className="text-sm font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
+            {getCategoryEmoji()} {category.title}
+          </span>
+        </motion.header>
 
-      {/* Progress bar */}
-      <div className="relative z-10 px-4 py-2">
-        <div className="h-1 bg-muted/30 rounded-full overflow-hidden">
-          <div 
-            className="h-full bg-primary transition-all duration-500 ease-out rounded-full"
-            style={{ width: `${progress}%` }}
-          />
-        </div>
-        <p className="text-xs text-muted-foreground text-center mt-2">
-          {currentStep + 1} of {category.questions.length}
-        </p>
-      </div>
-
-      {/* Question */}
-      <main className="relative z-10 flex-1 flex flex-col px-4 pt-6 pb-4 overflow-hidden">
-        <div 
-          className={`flex-1 flex flex-col transition-all duration-300 ${
-            isTransitioning ? 'opacity-0 translate-x-4' : 'opacity-100 translate-x-0'
-          }`}
+        {/* Progress bar */}
+        <motion.div
+          className="px-6 py-4"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.2 }}
         >
-          <h2 className="text-2xl font-bold text-foreground text-center mb-2 px-2">
-            {currentQuestion.text}
-          </h2>
-          
-          {currentQuestion.type === 'multi' && (
-            <p className="text-sm text-muted-foreground text-center mb-6">
-              Tap to select multiple options
-            </p>
-          )}
-          
-          {currentQuestion.type === 'single' && (
-            <p className="text-xs text-muted-foreground text-center mb-6">
-              Long press to select multiple
-            </p>
-          )}
+          <div className="h-2 bg-muted/30 rounded-full overflow-hidden relative">
+            <motion.div
+              className="h-full bg-gradient-to-r from-purple-600 to-pink-600 rounded-full shadow-lg"
+              initial={{ width: 0 }}
+              animate={{ width: `${progress}%` }}
+              transition={{ duration: 0.5, ease: "easeOut" }}
+            />
+          </div>
+          <p className="text-sm text-muted-foreground text-center mt-2 font-medium">
+            Question {currentStep + 1} of {category.questions.length}
+          </p>
+        </motion.div>
 
-          {/* Options */}
-          <div className="flex-1 overflow-y-auto pb-4">
-            <div className="grid grid-cols-2 gap-3">
-              {currentQuestion.options?.map((option, index) => (
-                <button
-                  key={option.value}
-                  onClick={() => handleSelect(option.value)}
-                  onTouchStart={() => handleLongPressStart(option.value)}
-                  onTouchEnd={handleLongPressEnd}
-                  onMouseDown={() => handleLongPressStart(option.value)}
-                  onMouseUp={handleLongPressEnd}
-                  onMouseLeave={handleLongPressEnd}
+        {/* Question */}
+        <main className="flex-1 flex flex-col px-6 pt-4 pb-6 overflow-hidden">
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={currentStep}
+              className="flex-1 flex flex-col"
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -20 }}
+              transition={{ duration: 0.3 }}
+            >
+              <motion.h2
+                className="text-3xl md:text-4xl font-bold text-foreground text-center mb-4 px-2"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.1 }}
+              >
+                {currentQuestion.text}
+              </motion.h2>
+
+              {currentQuestion.type === 'multi' && (
+                <motion.p
+                  className="text-sm text-muted-foreground text-center mb-6"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.2 }}
+                >
+                  Tap to select multiple options
+                </motion.p>
+              )}
+
+              {/* Options */}
+              <div className="flex-1 overflow-y-auto pb-4">
+                <div className="grid grid-cols-2 gap-3">
+                  {currentQuestion.options?.map((option, index) => (
+                    <motion.button
+                      key={option.value}
+                      onClick={() => handleSelect(option.value)}
+                      onTouchStart={() => handleLongPressStart(option.value)}
+                      onTouchEnd={handleLongPressEnd}
+                      onMouseDown={() => handleLongPressStart(option.value)}
+                      onMouseUp={handleLongPressEnd}
+                      onMouseLeave={handleLongPressEnd}
+                      className={`
+                        relative p-4 rounded-2xl border-2 transition-all duration-200
+                        flex flex-col items-center justify-center gap-2 min-h-[100px]
+                        ${isSelected(option.value)
+                          ? 'border-primary bg-gradient-to-br from-purple-600/10 to-pink-600/10 shadow-xl shadow-primary/20'
+                          : 'border-border glass hover:border-primary/50'
+                        }
+                      `}
+                      initial={{ opacity: 0, scale: 0.8 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      transition={{ delay: index * 0.05 }}
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                    >
+                      {isSelected(option.value) && (
+                        <motion.div
+                          className="absolute top-2 right-2 w-6 h-6 rounded-full bg-gradient-to-br from-purple-600 to-pink-600 flex items-center justify-center shadow-lg"
+                          initial={{ scale: 0 }}
+                          animate={{ scale: 1 }}
+                          transition={{ type: "spring", stiffness: 500, damping: 30 }}
+                        >
+                          <Check className="h-4 w-4 text-white" />
+                        </motion.div>
+                      )}
+                      <span className="text-base font-semibold text-foreground text-center">
+                        {option.label}
+                      </span>
+                    </motion.button>
+                  ))}
+                </div>
+              </div>
+            </motion.div>
+          </AnimatePresence>
+
+          {/* Multi-select continue button */}
+          <AnimatePresence>
+            {(currentQuestion.type === 'multi' || hasMultipleSelections()) && (
+              <motion.div
+                className="pt-4"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 20 }}
+              >
+                <motion.button
+                  onClick={handleMultiComplete}
+                  disabled={!answers[currentQuestion.id] || (Array.isArray(answers[currentQuestion.id]) && answers[currentQuestion.id].length === 0)}
                   className={`
-                    relative p-4 rounded-2xl border-2 transition-all duration-200
-                    flex flex-col items-center justify-center gap-2 min-h-[100px]
-                    transform active:scale-95
-                    ${isSelected(option.value) 
-                      ? 'border-primary bg-primary/10 shadow-lg shadow-primary/10' 
-                      : 'border-border bg-card/50 hover:border-primary/50 hover:bg-card'
+                    w-full py-5 rounded-2xl font-bold text-lg transition-all duration-300
+                    ${answers[currentQuestion.id] && (!Array.isArray(answers[currentQuestion.id]) || answers[currentQuestion.id].length > 0)
+                      ? 'bg-gradient-to-r from-purple-600 to-pink-600 text-white shadow-2xl shadow-primary/40'
+                      : 'bg-muted/30 text-muted-foreground cursor-not-allowed'
                     }
                   `}
-                  style={{
-                    animationDelay: `${index * 50}ms`,
-                  }}
+                  whileHover={answers[currentQuestion.id] && (!Array.isArray(answers[currentQuestion.id]) || answers[currentQuestion.id].length > 0) ? { scale: 1.02 } : {}}
+                  whileTap={answers[currentQuestion.id] && (!Array.isArray(answers[currentQuestion.id]) || answers[currentQuestion.id].length > 0) ? { scale: 0.98 } : {}}
                 >
-                  {isSelected(option.value) && (
-                    <div className="absolute top-2 right-2 w-5 h-5 rounded-full bg-primary flex items-center justify-center">
-                      <Check className="h-3 w-3 text-primary-foreground" />
-                    </div>
-                  )}
-                  <span className="text-sm font-medium text-foreground text-center">
-                    {option.label}
-                  </span>
-                </button>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        {/* Multi-select continue button */}
-        {(currentQuestion.type === 'multi' || hasMultipleSelections()) && (
-          <div className="mt-auto pt-4">
-            <button
-              onClick={handleMultiComplete}
-              disabled={!answers[currentQuestion.id] || (Array.isArray(answers[currentQuestion.id]) && answers[currentQuestion.id].length === 0)}
-              className={`
-                w-full py-4 rounded-2xl font-semibold text-lg transition-all duration-300
-                transform active:scale-95
-                ${answers[currentQuestion.id] && (!Array.isArray(answers[currentQuestion.id]) || answers[currentQuestion.id].length > 0)
-                  ? 'bg-primary text-primary-foreground shadow-lg shadow-primary/20'
-                  : 'bg-muted/30 text-muted-foreground cursor-not-allowed'
-                }
-              `}
-            >
-              {isLastQuestion ? 'Get My Decision' : 'Continue'}
-            </button>
-          </div>
-        )}
-      </main>
+                  {isLastQuestion ? 'Get My Decision' : 'Continue'}
+                </motion.button>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </main>
+      </div>
     </div>
   );
 }
