@@ -5,9 +5,10 @@ import { TrendingUp, TrendingDown, DollarSign, PiggyBank } from 'lucide-react';
 
 interface FinancialOverviewProps {
   summary: FinancialSummary;
+  currencySymbol?: string;
 }
 
-export function FinancialOverview({ summary }: FinancialOverviewProps) {
+export function FinancialOverview({ summary, currencySymbol = '$' }: FinancialOverviewProps) {
   const stats = [
     {
       title: 'Total Income',
@@ -62,7 +63,7 @@ export function FinancialOverview({ summary }: FinancialOverviewProps) {
             </CardHeader>
             <CardContent>
               <div className={`text-2xl font-bold ${stat.textColor}`}>
-                {stat.isPercentage ? `${stat.value.toFixed(1)}%` : `$${stat.value.toFixed(2)}`}
+                {stat.isPercentage ? `${stat.value.toFixed(1)}%` : `${currencySymbol}${stat.value.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
               </div>
             </CardContent>
           </Card>

@@ -199,7 +199,7 @@ export function Header() {
               animate={{ opacity: 1, height: 'auto' }}
               exit={{ opacity: 0, height: 0 }}
               transition={{ duration: 0.2 }}
-              className="md:hidden overflow-hidden glass-strong backdrop-blur-xl bg-background/95 dark:bg-background/90 rounded-b-2xl border border-white/10 shadow-2xl"
+              className="md:hidden overflow-hidden backdrop-blur-xl"
             >
               <nav className="flex flex-col gap-1 py-4">
                 {navItems.map((item, index) => (

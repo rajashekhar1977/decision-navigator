@@ -17,6 +17,10 @@ CREATE TABLE IF NOT EXISTS transactions (
   category TEXT NOT NULL,
   date DATE NOT NULL,
   type TEXT NOT NULL CHECK (type IN ('income', 'expense')),
+  attachment_url TEXT,
+  attachment_type TEXT CHECK (attachment_type IN ('image', 'pdf', 'none')),
+  notes TEXT,
+  tags TEXT[],
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
   updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );

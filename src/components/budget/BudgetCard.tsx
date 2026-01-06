@@ -7,9 +7,10 @@ import { AlertCircle, CheckCircle2 } from 'lucide-react';
 
 interface BudgetCardProps {
   budget: Budget;
+  currencySymbol?: string;
 }
 
-export function BudgetCard({ budget }: BudgetCardProps) {
+export function BudgetCard({ budget, currencySymbol = '$' }: BudgetCardProps) {
   const category = budgetCategories.find((c) => c.id === budget.category);
   const spent = budget.spent ?? 0;
   const limit = budget.limit ?? 0;
@@ -50,7 +51,7 @@ export function BudgetCard({ budget }: BudgetCardProps) {
           <div className="flex justify-between text-sm">
             <span className="text-muted-foreground">Spent</span>
             <span className={`font-semibold ${isOverBudget ? 'text-red-500' : 'text-foreground'}`}>
-              ${spent.toFixed(2)} / ${limit.toFixed(2)}
+              {currencySymbol}{spent.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} / {currencySymbol}{limit.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
             </span>
           </div>
           <Progress 
@@ -73,7 +74,7 @@ export function BudgetCard({ budget }: BudgetCardProps) {
           </div>
           {isOverBudget && (
             <p className="text-xs text-red-500 font-medium">
-              Over budget by ${(spent - limit).toFixed(2)}
+              Over budget by {currencySymbol}{(spent - limit).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
             </p>
           )}
         </CardContent>

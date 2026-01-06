@@ -11,9 +11,10 @@ import { v4 as uuidv4 } from 'uuid';
 
 interface SetBudgetModalProps {
   onSet: (budget: Budget) => void;
+  currencySymbol?: string;
 }
 
-export function SetBudgetModal({ onSet }: SetBudgetModalProps) {
+export function SetBudgetModal({ onSet, currencySymbol = '$' }: SetBudgetModalProps) {
   const [open, setOpen] = useState(false);
   const [formData, setFormData] = useState({
     category: '',
@@ -80,7 +81,7 @@ export function SetBudgetModal({ onSet }: SetBudgetModalProps) {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="limit">Budget Limit</Label>
+            <Label htmlFor="limit">Budget Limit ({currencySymbol})</Label>
             <Input
               id="limit"
               type="number"

@@ -5,6 +5,10 @@ export interface Transaction {
   category: string;
   date: string;
   type: 'income' | 'expense';
+  attachment_url?: string;
+  attachment_type?: 'image' | 'pdf' | 'none';
+  notes?: string;
+  tags?: string[];
 }
 
 export interface Budget {
@@ -27,4 +31,10 @@ export interface FinancialSummary {
   totalExpenses: number;
   balance: number;
   savingsRate: number;
+}
+
+export interface UserPreferences {
+  currency: string;
+  currencySymbol: string;
+  locale: string;
 }
